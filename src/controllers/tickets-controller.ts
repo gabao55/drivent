@@ -19,7 +19,7 @@ export async function getTickets(req: AuthenticatedRequest, res: Response) {
 
   try {
     const enrollmentId = (await enrollmentsService.getOneWithAddressByUserId(userId)).id;
-    const ticket = await ticketsService.getTicket(enrollmentId);
+    const ticket = await ticketsService.getTicketByEnrollment(enrollmentId);
 
     return res.status(httpStatus.OK).send(ticket);
   } catch (error) {

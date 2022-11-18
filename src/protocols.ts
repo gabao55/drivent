@@ -29,3 +29,21 @@ export type RequestError = {
   name: string,
   message: string,
 };
+
+export type Ticket = {
+  id: number,
+  status: "RESERVED" | "PAID",
+  ticketTypeId: number,
+  enrollmentId: number,
+  createdAt: Date,
+  updatedAt: Date,
+  price?: number,
+}
+
+export type cardData = {
+  issuer: "VISA" | "MASTERCARD",
+  number: number | string,
+  name: string,
+  expirationDate: Date,
+  cvv: number
+};

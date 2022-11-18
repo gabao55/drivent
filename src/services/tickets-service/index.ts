@@ -8,23 +8,32 @@ async function getTicketsTypes(): Promise<TicketType[]> {
   return ticketsTypes;
 }
 
-async function getTicket(enrollmentId: number): Promise<Ticket> {
-  const ticket = await ticketRepository.findTicketWithTicketType(enrollmentId);
+async function getTicketByEnrollment(enrollmentId: number): Promise<Ticket> {
+  const ticket = await ticketRepository.findTicketWithTicketTypeByEnrollmentId(enrollmentId);
   if (!ticket) throw notFoundError();
 
   return ticket;
 }
 
 async function createTicket(enrollmentId: number, ticketTypeId: number): Promise<Ticket> {
-  const ticket = await ticketRepository.insertTicket(enrollmentId, ticketTypeId);
+  const ticketId = await ticketRepository.insertTicket(enrollmentId, ticketTypeId);
+  const ticket = await getTicketById(ticketId);
+
+  return ticket;
+}
+
+async function getTicketById(ticketId: number) {
+  const ticket = await ticketRepository.findTicketWithTicketTypeById(ticketId);
+  if (!ticket) throw notFoundError();
 
   return ticket;
 }
 
 const ticketsService = {
   getTicketsTypes,
-  getTicket,
-  createTicket
+  getTicketByEnrollment,
+  createTicket,
+  getTicketById
 };
 
 export default ticketsService;
