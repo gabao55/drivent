@@ -19,6 +19,9 @@ async function createBooking(userId: number, roomId: number) {
   const roomBookings = await bookingRepository.getBookingsByRoomId(roomId);
   if (roomBookings.length >= room.capacity) throw fullRoomError();
 
+  const bookingExists = await bookingRepository.findBookingByUserId(userId);
+  if (bookingExists) throw fullRoomError();
+
   const booking = await bookingRepository.createBooking(userId, roomId);
 
   return booking;

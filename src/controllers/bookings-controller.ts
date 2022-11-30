@@ -27,6 +27,7 @@ export async function getBookingDetails(req: AuthenticatedRequest, res: Response
 export async function createBooking(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const { roomId } = req.body;
+  if (roomId === undefined) return res.sendStatus(httpStatus.NOT_FOUND);
 
   try {
     const booking = await bookingsService.createBooking(userId, roomId);
