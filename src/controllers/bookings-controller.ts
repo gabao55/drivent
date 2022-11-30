@@ -23,3 +23,24 @@ export async function getBookingDetails(req: AuthenticatedRequest, res: Response
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 }
+
+export async function createBooking(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const { roomId } = req.body;
+
+  try {
+    const booking = await bookingsService.createBooking(userId, roomId);
+
+    return res.status(httpStatus.OK).send({
+      bookingId: booking.id,
+    });
+  } catch (error) {
+    if (error.name === "NotFoundError") {
+      return res.sendStatus(httpStatus.NOT_FOUND);
+    }
+    if (error.name === "FullRoomError" || error.name === "CannotListHotelsError") {
+      return res.sendStatus(httpStatus.FORBIDDEN);
+    }
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
